@@ -1,0 +1,123 @@
+# K2 explore 活动代码
+
+## 时间点控制
+
+```go
+box.Countdown = 0
+	if !s.IsNilTime(curBox.AwardTime) {
+		// 已全部领取
+		box.Status = 4
+		box.Name = "明天再来"
+		s.BoxFinished(mid, date)
+	} else if now.Before(curBox.FinishTime) {
+		// 时间未到，
+		box.Status = 1
+		box.Countdown = curBox.FinishTime.Unix() - now.Unix()
+	} else {
+		box.Status = 2 // 可领取
+		box.Name = "可领取"
+	}
+```
+
+### isNilTime 
+
+用来判断活动时间是否结束
+
+````go
+func (s *ModelService) IsNilTime(t time.Time) bool {
+	tStr := t.Format("2006-01-02 15:04:05")
+	s.LogEntity.WithField("is_nil_time", tStr)
+	return tStr == "0001-01-01 00:00:00"
+}
+````
+
+### now.Before 
+
+时间判断
+
+````go
+func (t Time) Before(u Time) bool {
+  if t.wall&u.wall&hasMonotonic != 0 {
+  	return t.ext < u.ext
+  }
+  ts := t.sec()
+  us := u.sec()
+  return ts < us || ts == us && t.nsec() < u.nsec()
+}
+````
+
+
+
+## 分布式锁应用
+
+### 使用场景
+
+主要是针对于用户操作抽奖，防止多次抽奖。
+
+````go
+// 用户加锁，防止重放多抽
+lock := common.NewRedisLocker(s.RedisK2, s.UserLockerKey(currentUserID))
+if !lock.Lock() {
+  err = xerror.NewXerr(fmt.Errorf("get redis lock fail"), common.XErrInternel)
+  return
+}
+defer func() {
+  lock.Unlock()
+}()
+````
+
+
+
+## 事务应用
+
+````go
+err = s.Transaction(s.WriteDB, func(tx *xdb.XTx) (errTx error) {
+  errTx = dao.AddK2AwardRecord(s.WriteDB, awardRecode)
+
+  errTx = dao.UpdateK2Box(tx, s.ActivityID, k2boxid, currentUserID, map[string]interface{}{
+    "award_time":  now,
+    "update_time": now,
+    "status":      2,
+  })
+
+  return
+})
+if err != nil {
+  return
+}
+````
+
+主要是针对于用户的同一个事件进行的多表 CURD 操作。
+
+
+
+## fallthrough
+
+这个就是简单的让 switch 检测到当前 case 代码中存在没有逻辑操作，有此关键字，直接执行下一个 case。
+
+
+
+## bingo 抽奖细节
+
+````go
+// bingo 奖池抽奖
+func (s *ModelService) getBingoPrize(code, floorCode string) (pi *bingo.DrawResponse, realCode string, isHonor bool, err error)
+
+// BingoResToDrawData 将抽奖结果转换为接口返回的结构
+func (s *ModelService) BingoResToDrawData(rs *bingo.DrawResponse) (retData *m_hd.DrawData)
+````
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
