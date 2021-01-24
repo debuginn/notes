@@ -5,3 +5,14 @@ edit_uri: edit/main/docs/
 repo_url: https://github.com/debuginn/notes          
 remote_branch: gh-pages
 remote_name: origin
+google_analytics:
+  - G-FGN80L2048
+  - auto
+extra:
+  social:
+    - icon: fontawesome/brands/pied-piper-alt
+      link: https://www.debuginn.cn
+    - icon: fontawesome/brands/github
+      link: https://www.github.com/debuginn
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:debuginn@icloud.com
