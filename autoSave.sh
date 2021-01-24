@@ -1,6 +1,12 @@
+echo "------ job start ------"
 #!/bin/bash
 cd /Users/mengxiaoyu/Documents/Notes
-git config --local user.name 'debuginn' && git config --global user.email 'debuginn@icloud.com'
+echo "- set local git config -"
+git config --local user.name 'debuginn' && git config --local user.email 'debuginn@icloud.com'
+echo "- git pull origin/main -"
+git pull
+echo "- git push origin/main -"
 git add .
 git commit -m "crontab auto save"
 git push -u origin main
+echo "------ job end ------"
