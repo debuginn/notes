@@ -1,3 +1,5 @@
-site_name: Debug客栈 Notes
+site_name: Meng小羽的笔记
 theme:
   name: material
+remote_branch: gh-pages
+remote_name: origin
