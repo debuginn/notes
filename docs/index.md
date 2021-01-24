@@ -11,5 +11,5 @@
 
 
 
-![img](.assets/z7a0xz0od0c51.png)
+![img](assets/z7a0xz0od0c51.png)
 
