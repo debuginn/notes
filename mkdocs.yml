@@ -16,3 +16,12 @@ extra:
       link: https://www.github.com/debuginn
     - icon: fontawesome/solid/paper-plane
       link: mailto:debuginn@icloud.com
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js
+  - javascripts/config.js
+extra_css:
+  - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css
+
